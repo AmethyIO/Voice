@@ -7,7 +7,12 @@ class Player {
 
   uuid = uuid.v7();
   gpid = 0;
+
+  water = 0;
   health = 0;
+  hunger = 0;
+  temperature = 0;
+
   position = { x: 0, y: 0 };
   ingame = false;
   handshaked = false;
@@ -44,8 +49,7 @@ class Player {
 
     if (this.currentRoom) {
       const players = this.currentRoom.players
-        .filter(p => p.uuid !== this.uuid)
-        .map(p => ({ pos: p.position, uuid: p.uuid, gpid: p.gpid, health: p.health }));
+        .map(p => ({ pos: p.position, uuid: p.uuid, gpid: p.gpid, water: p.water, health: p.health, hunger: p.hunger, temperature: p.temperature }));
 
       if (players.length > 0) this.socket.emit('update.players', players);
     }
@@ -83,11 +87,15 @@ class Player {
     this.ingame = false;
   }
 
-  _updateInfo([x, y, health]) {
+  _updateInfo([x, y, health, hunger, temperature, water]) {
     if (!this.handshaked || !this.ingame)
       return;
 
+    this.water = water;
     this.health = health;
+    this.hunger = hunger;
+    this.temperature = temperature;
+
     this.position.x = x;
     this.position.y = y;
 

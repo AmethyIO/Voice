@@ -14,9 +14,10 @@ class Room {
     if (this.players.find(p => p.uuid === player.uuid))
       return false;
 
+    this.players.push(player);
+
     const players = this.players
-      .filter(p => p.uuid !== player.uuid)
-      .map(p => ({ pos: p.position, uuid: p.uuid, gpid: p.gpid, health: p.health }));
+      .map(p => ({ pos: p.position, uuid: p.uuid, gpid: p.gpid, water: p.water, health: p.health, hunger: p.hunger, temperature: p.temperature  }));
 
     this.players.filter(p => p.uuid !== player.uuid).forEach(p => {
       p.socket.emit(
@@ -33,11 +34,10 @@ class Room {
     player.socket.emit(
       'joined',
       [
+        this.name,
         players,
       ]
     );
-
-    this.players.push(player);
     return true;
   }
 
