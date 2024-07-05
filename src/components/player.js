@@ -41,6 +41,14 @@ class Player {
       return;
 
     this.socket.emit('update', 2);
+
+    if (this.currentRoom) {
+      const players = this.currentRoom.players
+        .filter(p => p.uuid !== this.uuid)
+        .map(p => ({ pos: p.position, uuid: p.uuid, gpid: p.gpid, health: p.health }));
+
+      if (players.length > 0) this.socket.emit('update.players', players);
+    }
   }
 
   _join([roomName, gpid]) {
