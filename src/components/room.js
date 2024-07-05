@@ -26,7 +26,10 @@ class Room {
           pos: player.position,
           uuid: player.uuid,
           gpid: player.gpid,
-          health: player.health
+          water: player.water,
+          health: player.health,
+          hunger: player.hunger,
+          temperature: player.temperature
         }
       );
     });
